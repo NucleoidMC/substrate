@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "substrate",
+  "version": "${version}",
+  "name": "Substrate",
+  "description": "A collection of worldgen utils to make minigame development easier.",
+  "authors": [
+    "SuperCoder79"
+  ],
+  "contact": {},
+  "license": "LGPL-3.0",
+  "icon": "assets/substrate/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "xyz.nucleoid.substrate.Substrate"
+    ]
+  },
+  "mixins": [
+    "substrate.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.10.8",
+    "fabric": "*",
+    "minecraft": "1.16.4"
+  }
+}
