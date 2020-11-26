@@ -24,6 +24,7 @@ public final class AspenTreeGen implements MapGen {
 
 	@Override
 	public void generate(ServerWorldAccess world, BlockPos pos, Random random) {
+		if (world.getBlockState(pos.down()) != Blocks.GRASS_BLOCK.getDefaultState()) return;
 
 		double maxRadius = 2 + ((random.nextDouble() - 0.5) * 0.2);
 		int leafDistance = random.nextInt(4) + 3;
