@@ -9,11 +9,7 @@ import net.minecraft.util.registry.RegistryLookupCodec;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 
-public class FakingBiomeSource extends BiomeSource {
-	public static final Codec<FakingBiomeSource> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(source -> source.biomeRegistry),
-			Codec.LONG.fieldOf("seed").stable().forGetter(source -> source.seed))
-			.apply(instance, instance.stable(FakingBiomeSource::new)));
+public abstract class FakingBiomeSource extends BiomeSource {
 
 	private final Registry<Biome> biomeRegistry;
 	private final long seed;
@@ -26,12 +22,12 @@ public class FakingBiomeSource extends BiomeSource {
 
 	@Override
 	protected Codec<? extends BiomeSource> getCodec() {
-		return CODEC;
+		return null;
 	}
 
 	@Override
 	public BiomeSource withSeed(long seed) {
-		return new FakingBiomeSource(this.biomeRegistry, seed);
+		return this;
 	}
 
 	@Override
@@ -39,8 +35,5 @@ public class FakingBiomeSource extends BiomeSource {
 		return biomeRegistry.get(getBiome(biomeX << 2, biomeZ << 2).getFakingBiome());
 	}
 
-	// This method is not actually abstract so that the codec works
-	public BaseBiomeGen getBiome(int x, int z) {
-		throw new AbstractMethodError("You must override this!");
-	}
+	public abstract BaseBiomeGen getBiome(int x, int z);
 }

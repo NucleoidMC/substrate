@@ -2,13 +2,11 @@ package xyz.nucleoid.substrate.chunk;
 
 import java.util.Collections;
 import java.util.Optional;
-import java.util.Random;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import xyz.nucleoid.substrate.biome.FakingBiomeSource;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
@@ -25,14 +23,10 @@ import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.StructuresConfig;
 
-public class WorldgenChunkGenerator extends ChunkGenerator {
-	public static final Codec<WorldgenChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			FakingBiomeSource.CODEC.fieldOf("source").forGetter(generator -> generator.biomeSource)
-	).apply(instance, WorldgenChunkGenerator::new));
-
+public class BaseChunkGenerator extends ChunkGenerator {
 	private final FakingBiomeSource biomeSource;
 
-	public WorldgenChunkGenerator(FakingBiomeSource source) {
+	public BaseChunkGenerator(FakingBiomeSource source) {
 		super(source, new StructuresConfig(Optional.empty(), Collections.emptyMap()));
 
 		this.biomeSource = source;
@@ -40,7 +34,7 @@ public class WorldgenChunkGenerator extends ChunkGenerator {
 
 	@Override
 	protected Codec<? extends ChunkGenerator> getCodec() {
-		return CODEC;
+		return null;
 	}
 
 	@Override
