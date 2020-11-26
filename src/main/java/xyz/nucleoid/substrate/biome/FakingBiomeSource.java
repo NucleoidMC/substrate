@@ -12,8 +12,8 @@ import net.minecraft.world.biome.source.BiomeSource;
 
 public abstract class FakingBiomeSource extends BiomeSource {
 
-	private final Registry<Biome> biomeRegistry;
-	private final long seed;
+	protected final Registry<Biome> biomeRegistry;
+	protected final long seed;
 
 	public FakingBiomeSource(Registry<Biome> biomeRegistry, long seed) {
 		super(ImmutableList.of());
