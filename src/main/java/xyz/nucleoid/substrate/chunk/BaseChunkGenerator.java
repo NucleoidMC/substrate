@@ -3,8 +3,10 @@ package xyz.nucleoid.substrate.chunk;
 import java.util.Collections;
 import java.util.Optional;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import xyz.nucleoid.substrate.biome.FakingBiomeSource;
 
 import net.minecraft.util.math.ChunkPos;
@@ -34,7 +36,17 @@ public class BaseChunkGenerator extends ChunkGenerator {
 
 	@Override
 	protected Codec<? extends ChunkGenerator> getCodec() {
-		return null;
+		return new Codec<ChunkGenerator>() {
+			@Override
+			public <T> DataResult<T> encode(ChunkGenerator input, DynamicOps<T> ops, T prefix) {
+				return DataResult.success(prefix);
+			}
+
+			@Override
+			public <T> DataResult<Pair<ChunkGenerator, T>> decode(DynamicOps<T> ops, T input) {
+				return DataResult.error("Decoding is not supported.");
+			}
+		};
 	}
 
 	@Override

@@ -1,11 +1,12 @@
 package xyz.nucleoid.substrate.biome;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryLookupCodec;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 
@@ -22,7 +23,17 @@ public abstract class FakingBiomeSource extends BiomeSource {
 
 	@Override
 	protected Codec<? extends BiomeSource> getCodec() {
-		return null;
+		return new Codec<BiomeSource>() {
+			@Override
+			public <T> DataResult<T> encode(BiomeSource input, DynamicOps<T> ops, T prefix) {
+				return DataResult.success(prefix);
+			}
+
+			@Override
+			public <T> DataResult<Pair<BiomeSource, T>> decode(DynamicOps<T> ops, T input) {
+				return DataResult.error("Decoding is not supported.");
+			}
+		};
 	}
 
 	@Override
