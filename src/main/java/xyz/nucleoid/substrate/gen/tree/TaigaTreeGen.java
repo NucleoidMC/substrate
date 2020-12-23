@@ -1,8 +1,8 @@
-package xyz.nucleoid.bedwars.game.generator.gen;
+package xyz.nucleoid.substrate.gen.tree;
 
 import java.util.Random;
 
-import xyz.nucleoid.plasmid.game.gen.GenHelper;
+import xyz.nucleoid.substrate.gen.GenHelper;
 import xyz.nucleoid.substrate.gen.MapGen;
 
 import net.minecraft.block.BlockState;
