@@ -55,6 +55,8 @@ jar {
     from "LICENSE"
 }
 
+def env = System.getenv()
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -68,16 +70,17 @@ publishing {
     }
 
     repositories {
-        if (project.hasProperty("mavenUrl")) {
+        if (env.MAVEN_URL) {
             maven {
                 credentials {
-                    username project.mavenUsername ?: ""
-                    password project.mavenPassword ?: ""
+                    username env.MAVEN_USERNAME
+                    password env.MAVEN_PASSWORD
                 }
-                url project.mavenUrl ?: ""
+                url env.MAVEN_URL
             }
         } else {
             mavenLocal()
         }
     }
 }
+
