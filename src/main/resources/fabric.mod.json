@@ -19,6 +19,13 @@
   "mixins": [
     "substrate.mixins.json"
   ],
+  "custom": {
+    "modmenu": {
+      "badges": [
+        "library"
+      ]
+    }
+  },
   "depends": {
     "fabricloader": ">=0.10.8",
     "fabric": "*",
