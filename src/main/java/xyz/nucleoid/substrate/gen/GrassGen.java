@@ -27,7 +27,7 @@ public final class GrassGen implements MapGen {
 
     @Override
     public void generate(ServerWorldAccess world, BlockPos pos, Random random) {
-        BlockState state = this.states.pickRandom(random);
+        BlockState state = this.states.shuffle().stream().findFirst().get();
 
         for (int i = 0; i < this.count; i++) {
             int aX = random.nextInt(this.horizontalSpread) - random.nextInt(this.horizontalSpread);

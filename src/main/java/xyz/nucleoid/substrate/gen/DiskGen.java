@@ -29,7 +29,7 @@ public final class DiskGen implements MapGen {
         int radiusSquared = radius * radius;
 
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-        BlockState state = this.states.pickRandom(random);
+        BlockState state = this.states.shuffle().stream().findFirst().get();
 
         for (int x = pos.getX() - radius; x <= pos.getX() + radius; ++x) {
             for (int z = pos.getZ() - radius; z <= pos.getZ() + radius; ++z) {

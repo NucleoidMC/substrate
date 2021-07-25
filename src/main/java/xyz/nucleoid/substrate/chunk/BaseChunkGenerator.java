@@ -2,19 +2,19 @@ package xyz.nucleoid.substrate.chunk;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import net.minecraft.world.*;
+import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import xyz.nucleoid.substrate.biome.FakingBiomeSource;
 
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.ChunkRegion;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.biome.source.BiomeArray;
@@ -57,7 +57,7 @@ public class BaseChunkGenerator extends ChunkGenerator {
 	@Override
 	public void populateBiomes(Registry<Biome> registry, Chunk chunk) {
 		ChunkPos chunkPos = chunk.getPos();
-		((ProtoChunk)chunk).setBiomes(new BiomeArray(registry, chunkPos, this.biomeSource));
+		((ProtoChunk)chunk).setBiomes(new BiomeArray(registry, chunk, chunkPos, this.biomeSource));
 	}
 
 	@Override
@@ -66,9 +66,20 @@ public class BaseChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	public void populateNoise(WorldAccess world, StructureAccessor accessor, Chunk chunk) {
-
+	public CompletableFuture<Chunk> populateNoise(Executor executor, StructureAccessor accessor, Chunk chunk) {
+		return CompletableFuture.completedFuture(chunk);
 	}
+
+	@Override
+	public int getHeight(int x, int z, Heightmap.Type heightmap, HeightLimitView world) {
+		return 0;
+	}
+
+	@Override
+	public VerticalBlockSample getColumnSample(int x, int z, HeightLimitView world) {
+		return null;
+	}
+
 
 	@Override
 	public void carve(long seed, BiomeAccess access, Chunk chunk, GenerationStep.Carver carver) {
@@ -78,15 +89,5 @@ public class BaseChunkGenerator extends ChunkGenerator {
 	@Override
 	public void generateFeatures(ChunkRegion region, StructureAccessor accessor) {
 
-	}
-
-	@Override
-	public int getHeight(int x, int z, Heightmap.Type heightmapType) {
-		return 0;
-	}
-
-	@Override
-	public BlockView getColumnSample(int x, int z) {
-		return null;
 	}
 }
