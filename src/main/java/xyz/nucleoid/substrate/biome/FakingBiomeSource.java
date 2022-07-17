@@ -7,8 +7,10 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 
 public abstract class FakingBiomeSource extends BiomeSource {
 
@@ -23,7 +25,7 @@ public abstract class FakingBiomeSource extends BiomeSource {
 
 	@Override
 	protected Codec<? extends BiomeSource> getCodec() {
-		return new Codec<BiomeSource>() {
+		return new Codec<>() {
 			@Override
 			public <T> DataResult<T> encode(BiomeSource input, DynamicOps<T> ops, T prefix) {
 				return DataResult.success(prefix);
@@ -37,13 +39,8 @@ public abstract class FakingBiomeSource extends BiomeSource {
 	}
 
 	@Override
-	public BiomeSource withSeed(long seed) {
-		return this;
-	}
-
-	@Override
-	public Biome getBiomeForNoiseGen(int biomeX, int biomeY, int biomeZ) {
-		return biomeRegistry.get(getBiome(biomeX << 2, biomeZ << 2).getFakingBiome());
+	public RegistryEntry<Biome> getBiome(final int x, final int y, final int z, final MultiNoiseUtil.MultiNoiseSampler noise) {
+		return biomeRegistry.getOrCreateEntry(getBiome(x << 2, z << 2).getFakingBiome());
 	}
 
 	public abstract BaseBiomeGen getBiome(int x, int z);
