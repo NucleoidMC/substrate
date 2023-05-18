@@ -4,9 +4,9 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import net.minecraft.registry.Registry;
 import net.minecraft.structure.StructureSet;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
@@ -28,8 +28,8 @@ import java.util.concurrent.Executor;
 public class BaseChunkGenerator extends ChunkGenerator {
 	private final FakingBiomeSource biomeSource;
 
-	public BaseChunkGenerator(final Registry<StructureSet> structureSetRegistry, final FakingBiomeSource biomeSource) {
-		super(structureSetRegistry, Optional.empty(), biomeSource);
+	public BaseChunkGenerator(final FakingBiomeSource biomeSource) {
+		super(biomeSource);
 		this.biomeSource = biomeSource;
 	}
 
@@ -43,7 +43,7 @@ public class BaseChunkGenerator extends ChunkGenerator {
 
 			@Override
 			public <T> DataResult<Pair<ChunkGenerator, T>> decode(DynamicOps<T> ops, T input) {
-				return DataResult.error("Decoding is not supported.");
+				return DataResult.error(() -> "Decoding is not supported.");
 			}
 		};
 	}

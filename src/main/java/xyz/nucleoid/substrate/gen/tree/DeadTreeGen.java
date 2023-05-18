@@ -53,7 +53,7 @@ public final class DeadTreeGen implements MapGen {
 					double randomTheta = (double) (random.nextFloat() * 2.0F) * 3.141592653589793D;
 					double localX = branchDirection * Math.sin(randomTheta) + 0.5D;
 					double localZ = branchDirection * Math.cos(randomTheta) + 0.5D;
-					BlockPos local = pos.add(localX, (yProgress - 1), localZ);
+					BlockPos local = pos.add((int) localX, (yProgress - 1), (int) localZ);
 					BlockPos upperLocal = local.up(5);
 
 					if (this.makeOrCheckBranch(world, random, local, upperLocal, false)) {
@@ -83,7 +83,7 @@ public final class DeadTreeGen implements MapGen {
 			float sideZ = (float) blockPos.getZ() / (float) longestSide;
 
 			for (int side = 0; side <= longestSide; ++side) {
-				BlockPos blockPos2 = start.add(0.5F + (float) side * sideX, 0.5F + (float) side * sideY, 0.5F + (float) side * sideZ);
+				BlockPos blockPos2 = start.add((int) (0.5F + (float) side * sideX), (int) (0.5F + (float) side * sideY), (int) (0.5F + (float) side * sideZ));
 				if (make) {
 					world.setBlockState(blockPos2, this.log.with(PillarBlock.AXIS, this.getLogAxis(start, blockPos2)), 3);
 				} else if (!TreeFeature.canReplace(world, blockPos2)) {

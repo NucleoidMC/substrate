@@ -6,8 +6,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
+
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
@@ -18,7 +19,6 @@ public abstract class FakingBiomeSource extends BiomeSource {
 	protected final long seed;
 
 	public FakingBiomeSource(Registry<Biome> biomeRegistry, long seed) {
-		super(ImmutableList.of());
 		this.biomeRegistry = biomeRegistry;
 		this.seed = seed;
 	}
@@ -33,14 +33,14 @@ public abstract class FakingBiomeSource extends BiomeSource {
 
 			@Override
 			public <T> DataResult<Pair<BiomeSource, T>> decode(DynamicOps<T> ops, T input) {
-				return DataResult.error("Decoding is not supported.");
+				return DataResult.error(() -> "Decoding is not supported.");
 			}
 		};
 	}
 
 	@Override
 	public RegistryEntry<Biome> getBiome(final int x, final int y, final int z, final MultiNoiseUtil.MultiNoiseSampler noise) {
-		return biomeRegistry.getOrCreateEntry(getBiome(x << 2, z << 2).getFakingBiome());
+		return biomeRegistry.getEntry(getBiome(x << 2, z << 2).getFakingBiome()).get();
 	}
 
 	public abstract BaseBiomeGen getBiome(int x, int z);
