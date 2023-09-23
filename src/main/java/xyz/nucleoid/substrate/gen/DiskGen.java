@@ -2,21 +2,23 @@ package xyz.nucleoid.substrate.gen;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.collection.Pool;
 import net.minecraft.util.collection.WeightedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.ServerWorldAccess;
+import xyz.nucleoid.substrate.util.WeightedEntry;
 
 public final class DiskGen implements MapGen {
     public static final DiskGen INSTANCE = new DiskGen(new WeightedList<BlockState>()
             .add(Blocks.SAND.getDefaultState(), 1)
             .add(Blocks.GRAVEL.getDefaultState(), 1), 2, 5);
-    private final WeightedList<BlockState> states;
+    private final Pool<WeightedEntry<BlockState>> states;
     private final int baseSize;
     private final int randomSize;
 
     public DiskGen(WeightedList<BlockState> states, int baseSize, int randomSize) {
-        this.states = states;
+        this.states = WeightedEntry.createPool(states);
         this.baseSize = baseSize;
         this.randomSize = randomSize;
     }
@@ -28,7 +30,7 @@ public final class DiskGen implements MapGen {
         int radiusSquared = radius * radius;
 
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-        BlockState state = this.states.shuffle().stream().findFirst().get();
+        BlockState state = this.states.getOrEmpty(random).map(WeightedEntry::object).orElse(Blocks.AIR.getDefaultState());
 
         for (int x = pos.getX() - radius; x <= pos.getX() + radius; ++x) {
             for (int z = pos.getZ() - radius; z <= pos.getZ() + radius; ++z) {
