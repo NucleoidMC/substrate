@@ -3,6 +3,7 @@ package xyz.nucleoid.substrate.gen;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.collection.Pool;
+import net.minecraft.util.collection.Weighted;
 import net.minecraft.util.collection.WeightedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -11,10 +12,10 @@ import xyz.nucleoid.substrate.util.WeightedEntry;
 
 public final class GrassGen implements MapGen {
     public static final GrassGen INSTANCE = new GrassGen(new WeightedList<BlockState>()
-            .add(Blocks.GRASS.getDefaultState(), 32)
+            .add(Blocks.SHORT_GRASS.getDefaultState(), 32)
             .add(Blocks.DANDELION.getDefaultState(), 1)
             .add(Blocks.POPPY.getDefaultState(), 1), 16, 8, 4);
-    private final Pool<WeightedEntry<BlockState>> states;
+    private final Pool<BlockState> states;
     private final int count;
     private final int horizontalSpread;
     private final int verticalSpread;
@@ -28,7 +29,7 @@ public final class GrassGen implements MapGen {
 
     @Override
     public void generate(ServerWorldAccess world, BlockPos pos, Random random) {
-        BlockState state = this.states.getOrEmpty(random).map(WeightedEntry::object).orElse(Blocks.AIR.getDefaultState());
+        BlockState state = this.states.getOrEmpty(random).orElse(Blocks.AIR.getDefaultState());
 
         for (int i = 0; i < this.count; i++) {
             int aX = random.nextInt(this.horizontalSpread) - random.nextInt(this.horizontalSpread);

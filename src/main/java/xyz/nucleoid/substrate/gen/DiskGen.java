@@ -13,7 +13,7 @@ public final class DiskGen implements MapGen {
     public static final DiskGen INSTANCE = new DiskGen(new WeightedList<BlockState>()
             .add(Blocks.SAND.getDefaultState(), 1)
             .add(Blocks.GRAVEL.getDefaultState(), 1), 2, 5);
-    private final Pool<WeightedEntry<BlockState>> states;
+    private final Pool<BlockState> states;
     private final int baseSize;
     private final int randomSize;
 
@@ -30,7 +30,7 @@ public final class DiskGen implements MapGen {
         int radiusSquared = radius * radius;
 
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-        BlockState state = this.states.getOrEmpty(random).map(WeightedEntry::object).orElse(Blocks.AIR.getDefaultState());
+        BlockState state = this.states.getOrEmpty(random).orElse(Blocks.AIR.getDefaultState());
 
         for (int x = pos.getX() - radius; x <= pos.getX() + radius; ++x) {
             for (int z = pos.getZ() - radius; z <= pos.getZ() + radius; ++z) {

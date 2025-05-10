@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.registry.Registry;
 import net.minecraft.structure.StructureSet;
 import net.minecraft.util.math.BlockPos;
@@ -34,22 +35,13 @@ public class BaseChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	protected Codec<? extends ChunkGenerator> getCodec() {
-		return new Codec<>() {
-			@Override
-			public <T> DataResult<T> encode(ChunkGenerator input, DynamicOps<T> ops, T prefix) {
-				return DataResult.success(prefix);
-			}
-
-			@Override
-			public <T> DataResult<Pair<ChunkGenerator, T>> decode(DynamicOps<T> ops, T input) {
-				return DataResult.error(() -> "Decoding is not supported.");
-			}
-		};
+	protected MapCodec<? extends ChunkGenerator> getCodec() {
+		return MapCodec.unit(this);
 	}
 
 	@Override
-	public void carve(final ChunkRegion region, final long seed, final NoiseConfig noiseConfig, final BiomeAccess world, final StructureAccessor structureAccessor, final Chunk chunk, final GenerationStep.Carver carverStep) {
+	public void carve(ChunkRegion chunkRegion, long seed, NoiseConfig noiseConfig, BiomeAccess biomeAccess, StructureAccessor structureAccessor, Chunk chunk) {
+
 	}
 
 	@Override
@@ -66,7 +58,7 @@ public class BaseChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	public CompletableFuture<Chunk> populateNoise(final Executor executor, final Blender blender, final NoiseConfig noiseConfig, final StructureAccessor structureAccessor, final Chunk chunk) {
+	public CompletableFuture<Chunk> populateNoise(Blender blender, NoiseConfig noiseConfig, StructureAccessor structureAccessor, Chunk chunk) {
 		return CompletableFuture.completedFuture(chunk);
 	}
 
@@ -91,6 +83,8 @@ public class BaseChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	public void getDebugHudText(final List<String> text, final NoiseConfig noiseConfig, final BlockPos pos) {
+	public void appendDebugHudText(List<String> text, NoiseConfig noiseConfig, BlockPos pos) {
+
 	}
+
 }
