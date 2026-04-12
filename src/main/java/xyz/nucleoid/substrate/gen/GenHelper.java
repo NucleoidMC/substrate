@@ -1,15 +1,14 @@
 package xyz.nucleoid.substrate.gen;
 
 import java.util.function.Consumer;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 
 public final class GenHelper {
     public static final Direction[] HORIZONTALS = new Direction[] { Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST };
 
     // Code used from Terraform
-    public static void circle(BlockPos.Mutable origin, double radius, Consumer<BlockPos.Mutable> consumer) {
+    public static void circle(BlockPos.MutableBlockPos origin, double radius, Consumer<BlockPos.MutableBlockPos> consumer) {
         int x = origin.getX();
         int z = origin.getZ();
         double radiusSq = radius * radius;

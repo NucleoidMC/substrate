@@ -1,8 +1,8 @@
 package xyz.nucleoid.substrate.biome;
 
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.Biome;
 
 public interface BaseBiomeGen {
-	RegistryKey<Biome> getFakingBiome();
+	ResourceKey<Biome> getFakingBiome();
 }

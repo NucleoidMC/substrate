@@ -5,26 +5,23 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.registry.Registry;
-import net.minecraft.structure.StructureSet;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkRegion;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.source.BiomeAccess;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.StructureAccessor;
-import net.minecraft.world.gen.chunk.Blender;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.VerticalBlockSample;
-import net.minecraft.world.gen.noise.NoiseConfig;
 import xyz.nucleoid.substrate.biome.FakingBiomeSource;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.NoiseColumn;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.blending.Blender;
 
 public class BaseChunkGenerator extends ChunkGenerator {
 	private final FakingBiomeSource biomeSource;
@@ -35,30 +32,30 @@ public class BaseChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	protected MapCodec<? extends ChunkGenerator> getCodec() {
+	protected MapCodec<? extends ChunkGenerator> codec() {
 		return MapCodec.unit(this);
 	}
 
 	@Override
-	public void carve(ChunkRegion chunkRegion, long seed, NoiseConfig noiseConfig, BiomeAccess biomeAccess, StructureAccessor structureAccessor, Chunk chunk) {
+	public void applyCarvers(WorldGenRegion chunkRegion, long seed, RandomState noiseConfig, BiomeManager biomeAccess, StructureManager structureAccessor, ChunkAccess chunk) {
 
 	}
 
 	@Override
-	public void buildSurface(final ChunkRegion region, final StructureAccessor structures, final NoiseConfig noiseConfig, final Chunk chunk) {
+	public void buildSurface(final WorldGenRegion region, final StructureManager structures, final RandomState noiseConfig, final ChunkAccess chunk) {
 	}
 
 	@Override
-	public void populateEntities(final ChunkRegion region) {
+	public void spawnOriginalMobs(final WorldGenRegion region) {
 	}
 
 	@Override
-	public int getWorldHeight() {
+	public int getGenDepth() {
 		return 0;
 	}
 
 	@Override
-	public CompletableFuture<Chunk> populateNoise(Blender blender, NoiseConfig noiseConfig, StructureAccessor structureAccessor, Chunk chunk) {
+	public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState noiseConfig, StructureManager structureAccessor, ChunkAccess chunk) {
 		return CompletableFuture.completedFuture(chunk);
 	}
 
@@ -68,22 +65,22 @@ public class BaseChunkGenerator extends ChunkGenerator {
 	}
 
 	@Override
-	public int getMinimumY() {
+	public int getMinY() {
 		return 0;
 	}
 
 	@Override
-	public int getHeight(final int x, final int z, final Heightmap.Type heightmap, final HeightLimitView world, final NoiseConfig noiseConfig) {
+	public int getBaseHeight(final int x, final int z, final Heightmap.Types heightmap, final LevelHeightAccessor world, final RandomState noiseConfig) {
 		return 0;
 	}
 
 	@Override
-	public VerticalBlockSample getColumnSample(final int x, final int z, final HeightLimitView world, final NoiseConfig noiseConfig) {
+	public NoiseColumn getBaseColumn(final int x, final int z, final LevelHeightAccessor world, final RandomState noiseConfig) {
 		return null;
 	}
 
 	@Override
-	public void appendDebugHudText(List<String> text, NoiseConfig noiseConfig, BlockPos pos) {
+	public void addDebugScreenInfo(List<String> text, RandomState noiseConfig, BlockPos pos) {
 
 	}
 

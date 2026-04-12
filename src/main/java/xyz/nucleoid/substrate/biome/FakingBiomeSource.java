@@ -1,11 +1,11 @@
 package xyz.nucleoid.substrate.biome;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeSource;
-import net.minecraft.world.biome.source.util.MultiNoiseUtil;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Climate;
 
 public abstract class FakingBiomeSource extends BiomeSource {
 
@@ -18,12 +18,12 @@ public abstract class FakingBiomeSource extends BiomeSource {
     }
 
     @Override
-    protected MapCodec<? extends BiomeSource> getCodec() {
+    protected MapCodec<? extends BiomeSource> codec() {
         return MapCodec.unit(this);
     }
 
     @Override
-    public RegistryEntry<Biome> getBiome(final int x, final int y, final int z, final MultiNoiseUtil.MultiNoiseSampler noise) {
+    public Holder<Biome> getNoiseBiome(final int x, final int y, final int z, final Climate.Sampler noise) {
         return biomeRegistry.getOrThrow(getBiome(x << 2, z << 2).getFakingBiome());
     }
 

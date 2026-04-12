@@ -1,9 +1,9 @@
 package xyz.nucleoid.substrate.gen;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 public interface MapGen {
-    void generate(ServerWorldAccess world, BlockPos pos, Random random);
+    void generate(ServerLevelAccessor world, BlockPos pos, RandomSource random);
 }
