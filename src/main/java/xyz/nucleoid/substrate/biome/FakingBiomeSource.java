@@ -1,9 +1,9 @@
 package xyz.nucleoid.substrate.biome;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeResolver;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 
@@ -23,8 +23,8 @@ public abstract class FakingBiomeSource extends BiomeSource {
     }
 
     @Override
-    public Holder<Biome> getNoiseBiome(final int x, final int y, final int z, final Climate.Sampler noise) {
-        return biomeRegistry.getOrThrow(getBiome(x << 2, z << 2).getFakingBiome());
+    public BiomeResolver createResolver(Climate.Sampler noise){
+        return (x, _, z) -> biomeRegistry.getOrThrow(getBiome(x << 2, z << 2).getFakingBiome());
     }
 
     public abstract BaseBiomeGen getBiome(int x, int z);
