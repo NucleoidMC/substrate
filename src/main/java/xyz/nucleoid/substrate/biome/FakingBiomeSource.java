@@ -4,8 +4,11 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeResolver;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
+
+import java.util.stream.Stream;
 
 public abstract class FakingBiomeSource extends BiomeSource {
 
@@ -23,8 +26,13 @@ public abstract class FakingBiomeSource extends BiomeSource {
     }
 
     @Override
-    public Holder<Biome> getNoiseBiome(final int x, final int y, final int z, final Climate.Sampler noise) {
-        return biomeRegistry.getOrThrow(getBiome(x << 2, z << 2).getFakingBiome());
+    protected Stream<Holder<Biome>> collectPossibleBiomes() {
+        return this.biomeRegistry.stream().map(this.biomeRegistry::wrapAsHolder);
+    }
+
+    @Override
+    public BiomeResolver createResolver(Climate.Sampler sampler) {
+        return (quartX, quartY, quartZ) -> biomeRegistry.getOrThrow(getBiome(quartX << 2, quartZ << 2).getFakingBiome());
     }
 
     public abstract BaseBiomeGen getBiome(int x, int z);
